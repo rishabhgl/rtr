@@ -1,6 +1,8 @@
 const express = require('express');
+const client = require('./database')
 const app = express();
-const port = 3000;
+const port = 5000;
+
 
 // Middleware to parse JSON bodies
 app.use(express.json());
@@ -13,6 +15,16 @@ app.get('/api/home', (req, res) => {
     books_due: 20,
   });
 });
+
+app.get('/api/books/available', async (req, res) => {
+    const books = await client.query(`SELECT book_id, book_name FROM books`)
+    res.json(books.rows);
+  });
+
+app.get('/api/students/', async (req, res) => {
+    const books = await client.query(`SELECT student_id, name FROM student`)
+    res.json(books.rows);
+  });
 
 // A route to handle GET requests to /users
 app.get('/api/books/due', (req, res) => {
